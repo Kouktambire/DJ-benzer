@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radio DJ Benzer Live 🎧</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+  body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .radio-card {
+    background: #0f0f0f;
+    width: 360px;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.6);
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .header h1 {
+    font-size: 1.4em;
+    font-weight: 600;
+  }
+
+  .status {
+    font-size: 0.9em;
+    color: #9e9e9e;
+    margin-bottom: 5px;
+  }
+
+  .track-info {
+    margin-top: 10px;
+  }
+
+  .track-title {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #00e6ff;
+  }
+
+  .track-artist {
+    font-size: 0.95em;
+    color: #9e9e9e;
+  }
+
+  .album-cover {
+    margin-top: 15px;
+    width: 100%;
+    border-radius: 10px;
+    height: 200px;
+    object-fit: cover;
+    background: #222;
+  }
+
+  audio {
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 10px;
+  }
+
+  .programs {
+    margin-top: 25px;
+  }
+
+  .programs h3 {
+    font-weight: 600;
+    font-size: 1.1em;
+    margin-bottom: 10px;
+  }
+
+  .program-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 0.8em;
+    opacity: 0.6;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="radio-card">
+  <div class="header">
+    <h1>Radio DJ Benzer</h1>
+    <img src="https://img.icons8.com/ios-filled/40/00e6ff/sound-wave.png" alt="wave">
+  </div>
+
+  <div class="status">En cours...</div>
+
+  <div class="track-info">
+    <div class="track-title" id="songTitle">Chargement...</div>
+    <div class="track-artist" id="songArtist">Radio DJ Benzer</div>
+  </div>
+
+  <img id="albumCover"
+       src="https://cdn.pixabay.com/photo/2016/11/29/04/17/black-1869588_960_720.jpg"
+       alt="cover"
+       class="album-cover">
+
+  <audio id="player" controls autoplay>
+    <source src="http://s5.myradiostream.com:50342/;" type="audio/mpeg">
+    Votre navigateur ne supporte pas l'audio.
+  </audio>
+
+  <div class="programs">
+    <h3>Programmes du jour</h3>
+    <div class="program-item"><span>Afro 2025 Nouveautés</span><span>7h00 GMT</span></div>
+    <div class="program-item"><span>All Asake</span><span>8h00 GMT</span></div>
+    <div class="program-item"><span>Mix Himra, Jeune Lion etc.</span><span>10h00 GMT</span></div>
+    <div class="program-item"><span>──────────</span><span>Pause</span></div>
+    <div class="program-item"><span>Mix Old Afro</span><span>20h00 GMT</span></div>
+  </div>
+
+  <footer>© 2025 Radio DJ Benzer — Powered by MyRadioStream</footer>
+</div>
+
+<script>
+  const songTitle = document.getElementById('songTitle');
+  const songArtist = document.getElementById('songArtist');
+
+  // URL "Now Playing" MyRadioStream (remplace si ton ID diffère)
+  const nowPlayingURL = "https://myradiostream.com/nowplaying/kouktambire";
+
+  async function updateSongInfo() {
+    try {
+      const res = await fetch(nowPlayingURL);
+      const text = await res.text();
+
+      // Exemple : "Bas - Larry Gaaga"
+      if (text.includes('-')) {
+        const [artist, title] = text.split('-').map(t => t.trim());
+        songArtist.textContent = artist;
+        songTitle.textContent = title;
+      } else {
+        songTitle.textContent = text.trim() || "Live en cours...";
+        songArtist.textContent = "Radio DJ Benzer";
+      }
+    } catch {
+      songTitle.textContent = "Live en cours...";
+      songArtist.textContent = "Radio DJ Benzer";
+    }
+  }
+
+  updateSongInfo();
+  setInterval(updateSongInfo, 10000); // rafraîchit toutes les 10 s
+</script>
+
+</body>
+</html>
