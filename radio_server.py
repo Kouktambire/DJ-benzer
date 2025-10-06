@@ -10,12 +10,18 @@ NOW_PLAYING_FILE = "nowplaying.txt"
 # 📥 Réception du flux envoyé par BUTT
 @app.route("/upload", methods=["POST"])
 def upload():
+    auth_header = request.headers.get("Authorization", "")
+    # Autorise n’importe quel mot de passe ou celui défini ici :
+    if "benzer123" not in auth_header and auth_header != "":
+        return "Unauthorized", 401
+
     with open(AUDIO_FILE, "wb") as f:
         while True:
             chunk = request.stream.read(1024)
             if not chunk:
                 break
             f.write(chunk)
+    print("🎧 Flux reçu depuis BUTT")
     return "Flux reçu", 200
 
 
